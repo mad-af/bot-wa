@@ -1,0 +1,28 @@
+{
+  "name": "bot-whatsapp",
+  "version": "1.0.0",
+  "description": "Bot WhatsApp",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "bot-whatsapp"
+  },
+  "keywords": [
+    "whatsapp"
+  ],
+  "author": "Mochamad Aufa",
+  "license": "ISC",
+  "dependencies": {
+    "@adiwajshing/baileys": "^4.1.0",
+    "@open-wa/wa-automate": "^4.39.0",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "puppeteer": "^14.4.0",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.16.7"
+  }
+}
