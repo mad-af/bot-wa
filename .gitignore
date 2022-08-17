@@ -1,2 +1,9 @@
 node_modules
 client-*
+.wwebjs_auth
+
+# managed
+**.data.json
+**.node-persist**
+**_IGNORE_**
+# end managed

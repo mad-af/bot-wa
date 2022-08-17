@@ -3,7 +3,7 @@ const qrcode = require('qrcode-terminal');
 
 const { Client, LocalAuth } = require('whatsapp-web.js');
 
-for (let e of ['one', 'two', 'three']) {
+for (let e of ['one']) {
   const client = new Client({
     authStrategy: new LocalAuth({
       clientId: "client-"+e
