@@ -1,8 +1,8 @@
 const {google} = require("googleapis");
 const {GoogleAuth} = require("google-auth-library");
 
-
-async function readSheet(){
+let datas = [];
+async function getSheetRows(){
   const auth = new GoogleAuth({
     keyFile: "credentials.json",
     scopes: "https://www.googleapis.com/auth/spreadsheets",
@@ -28,7 +28,22 @@ async function readSheet(){
     range: "Sheet1",
   });
   
-  console.log(getRows.data.values);
+  // console.log(getRows.data.values);
+  return getRows.data.values;
 }
 
-readSheet();
+// readSheet().then((res)=> {
+//   datas = res;
+//   for (x of datas) {
+//     console.log(x);
+//   }
+// })
+// setDatas = async () => {
+//   datas = await readSheet();
+//   for (const x of datas) {
+//     console.log(x);
+//   }
+// }
+// setDatas();
+
+module.exports = getSheetRows;

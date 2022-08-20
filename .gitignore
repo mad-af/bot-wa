@@ -1,6 +1,7 @@
 node_modules
 client-*
 .wwebjs_auth
+credentials.json
 
 # managed
 **.data.json

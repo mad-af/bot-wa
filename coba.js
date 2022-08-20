@@ -1,4 +1,5 @@
 
+const getSheetRows = require("./sheet.js");
 const qrcode = require('qrcode-terminal');
 
 const { Client, LocalAuth } = require('whatsapp-web.js');
@@ -26,9 +27,15 @@ for (let e of ['one']) {
   });
 
   client.on('message', message => {
-    if(message.body === '!ping') {
-      message.reply('pong');
-    }
+    getSheetRows().then((value) => {
+      const rows = value;
+      for (const row of rows) {
+        console.log(row);
+        if(message.body === row[0]) {
+          message.reply(''+row[1]);
+        }
+      }
+    })
   });
 }
 
