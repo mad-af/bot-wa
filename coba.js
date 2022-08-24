@@ -1,8 +1,25 @@
 
-const getSheetRows = require("./sheet.js");
+const sheetApi = require("./sheet.js");
 const qrcode = require('qrcode-terminal');
 
 const { Client, LocalAuth } = require('whatsapp-web.js');
+
+let availableNumbers = [] 
+const getAvailableNumbers = async () => {
+  const hasil = (await sheetApi()).availableNumbers;
+  availableNumbers = hasil ? hasil.map(value => value[0]) : [];
+};
+getAvailableNumbers();
+
+function isNumberExist(number) {
+  for (const existNumber of availableNumbers) {
+    // console.log(existNumber, number);
+    if (existNumber === number) {
+      // console.log(existNumber, number);
+      return true;
+    }
+  }
+}
 
 for (let e of ['one']) {
   const client = new Client({
@@ -26,16 +43,24 @@ for (let e of ['one']) {
       console.log('Client is ready!');
   });
 
-  client.on('message', message => {
-    getSheetRows().then((value) => {
-      const rows = value;
-      for (const row of rows) {
-        console.log(row);
-        if(message.body === row[0]) {
-          message.reply(''+row[1]);
-        }
+  client.on('message', async (message) => {
+    const name = message._data.notifyName;
+    const number = message.from.replace('@c.us','');
+    if(!isNumberExist(number)){
+      (await sheetApi()).setRows(name, number);
+      console.log('Berhasil menambahkan nomer');
+    }
+    console.log(availableNumbers);
+    // console.log(name, number);
+
+    const rows = (await sheetApi()).getRows;
+    for (const row of rows) {
+      if(message.body === row[0]) {
+        message.reply(''+row[1]);
       }
-    })
+    }
+    getAvailableNumbers();
+    // console.log(rows);
   });
 }
 

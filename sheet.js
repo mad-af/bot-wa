@@ -1,35 +1,60 @@
 const {google} = require("googleapis");
 const {GoogleAuth} = require("google-auth-library");
 
-let datas = [];
-async function getSheetRows(){
+async function sheetApi(){
   const auth = new GoogleAuth({
     keyFile: "credentials.json",
     scopes: "https://www.googleapis.com/auth/spreadsheets",
   });
   // Create client instance for auth
   const client = await auth.getClient();
-  
+
   // Instance of Google Sheets API
   const googleSheets = google.sheets({ version: "v4", auth: client });
-  
   const spreadsheetId = "1jBkTwXHXCd0Dp9GYmJg0nd6h2Ni-0lRSlxm9O61sZh0";
-  
+
   // Get metadata about spreadsheet
-  const metaData = await googleSheets.spreadsheets.get({
+  const metaData = googleSheets.spreadsheets.get({
     auth,
     spreadsheetId,
   });
-  
+
+  // Get number that already in sheet
+  const availableNumbers = await googleSheets.spreadsheets.values.get({
+    auth,
+    spreadsheetId,
+    range: "Sheet2!B:B",
+  }); 
+
   // Read rows from spreadsheet
   const getRows = await googleSheets.spreadsheets.values.get({
     auth,
     spreadsheetId,
     range: "Sheet1",
   });
-  
-  // console.log(getRows.data.values);
-  return getRows.data.values;
+
+  // Write rows
+  const setRows = async (name, number) => {
+
+    const rawDataofSheet = {
+      auth,
+      spreadsheetId,
+      range: 'Sheet2!A:B',
+      valueInputOption: 'USER_ENTERED',
+      resource: {
+        values: [
+          [name, number]
+        ]
+      }
+    }
+    await googleSheets.spreadsheets.values.append(rawDataofSheet);
+  };
+
+  return {
+    getRows: getRows.data.values,
+    setRows,
+    availableNumbers: availableNumbers.data.values,
+  };
 }
 
 // readSheet().then((res)=> {
@@ -46,4 +71,4 @@ async function getSheetRows(){
 // }
 // setDatas();
 
-module.exports = getSheetRows;
+module.exports = sheetApi;
